@@ -1,0 +1,66 @@
+// package main
+
+// import (
+// 	"crypto/hmac"
+// 	"crypto/sha1"
+// 	"encoding/json"
+// 	"fmt"
+// 	"net/http"
+// 	"time"
+
+// 	"github.com/gorilla/handlers"
+// 	"github.com/gorilla/mux"
+// )
+
+// const (
+// 	turnStaticAuthSecret = "supersecuresecret" // TURN 서버의 static-auth-secret
+// 	turnRealm            = "yourdomain.com"    // TURN 서버의 realm
+// )
+
+// type TurnCredentials struct {
+// 	Username   string `json:"username"`
+// 	Credential string `json:"credential"`
+// 	Realm      string `json:"realm"`
+// }
+
+// func generateTurnCredentials() TurnCredentials {
+// 	timestamp := time.Now().Unix()
+// 	username := fmt.Sprintf("%d", timestamp)
+
+// 	// Generate HMAC-SHA1 credential using the static-auth-secret
+// 	credential := fmt.Sprintf("%x", hmacSHA1(turnStaticAuthSecret, username))
+
+// 	return TurnCredentials{
+// 		Username:   username,
+// 		Credential: credential,
+// 		Realm:      turnRealm,
+// 	}
+// }
+
+// func hmacSHA1(secret, message string) []byte {
+// 	// Use HMAC-SHA1 to generate the credential
+// 	h := hmac.New(sha1.New, []byte(secret))
+// 	h.Write([]byte(message))
+// 	return h.Sum(nil)
+// }
+
+// func turnHandler(w http.ResponseWriter, r *http.Request) {
+// 	credentials := generateTurnCredentials()
+
+// 	w.Header().Set("Content-Type", "application/json")
+// 	json.NewEncoder(w).Encode(credentials)
+// }
+
+// func main() {
+// 	router := mux.NewRouter()
+
+// 	// Define the TURN endpoint
+// 	router.HandleFunc("/turn", turnHandler).Methods("GET")
+
+// 	// Add CORS middleware
+// 	corsAllowedOrigins := handlers.AllowedOrigins([]string{"http://localhost:3000"}) // React 앱 주소
+// 	corsAllowedMethods := handlers.AllowedMethods([]string{"GET", "POST", "OPTIONS"})
+
+// 	fmt.Println("Server running at http://localhost:8080")
+// 	http.ListenAndServe(":8080", handlers.CORS(corsAllowedOrigins, corsAllowedMethods)(router))
+// }
