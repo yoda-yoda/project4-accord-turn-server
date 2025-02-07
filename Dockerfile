@@ -17,4 +17,4 @@ COPY --from=builder /app/simple_turn .
 
 EXPOSE 3478/udp
 
-CMD ["./simple_turn", "-public-ip", "127.0.0.1", "-users", "user1=pass1"]
+CMD ["./simple_turn", "-public-ip", "127.0.0.1", "-users", "user=pass"]
